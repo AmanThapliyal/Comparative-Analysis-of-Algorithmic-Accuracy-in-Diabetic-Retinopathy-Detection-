@@ -1,0 +1,2 @@
+# Comparative-Analysis-of-Algorithmic-Accuracy-in-Diabetic-Retinopathy-Detection-
+Develop a robust and reliable model for the detection and classification of Diabetic   Retinopathy (DR) into five distinct categories: No Diabetic Retinopathy (NO DR), Mild,  Moderate, Proliferative, and Severe. The objective is to support early diagnosis and improve  clinical decision-making by automating the analysis of retinal images.  
