@@ -1,0 +1,33 @@
+1. Overall Accuracy:  
+o Random Forest has the highest accuracy (93%), followed by SVM (86%) and 
+CNN (70%).  
+2. Performance on NO DR Cases:  
+o Random Forest performs the best, followed by SVM. CNN has moderate 
+performance in this category.  
+3. Performance on Mild & Moderate Cases:  
+o SVM and Random Forest show balanced performance, while CNN struggles 
+with inconsistent results.  
+4. Recall for Proliferative and Severe Cases:  
+o Random Forest significantly outperforms the other two models in recall for 
+both proliferative (0.75) and severe (0.64) cases.  
+o SVM performs moderately, while CNN has low recall in these categories 
+(Proliferative: 0.26, Severe: 0.16).  
+5. Key Strengths:  
+o SVM: Excels in "NO DR" classification and has robustness in simpler tasks.  
+o Random Forest: Handles data variability effectively, making it the most 
+balanced and accurate model overall.  
+o CNN: Has potential for advanced feature learning due to its deep learning 
+architecture.  
+6. Key Challenges:  
+o SVM: Overlap in advanced stages reduces its effectiveness for complex cases. 
+o  
+robust.  
+Random Forest: Struggles with severe cases, despite generally being 
+o CNN: Requires extensive data and careful tuning to improve performance, 
+particularly for severe cases.  
+General Conclusion:  
+• Random Forest appears to be the most suitable model overall, due to its superior 
+accuracy and balanced performance across categories.  
+• SVM is reliable for simpler classification tasks but struggles in complex cases.  
+• CNN may require more data, fine-tuning, and improvements to address its current 
+limitations and realize its potential for feature learning.  
