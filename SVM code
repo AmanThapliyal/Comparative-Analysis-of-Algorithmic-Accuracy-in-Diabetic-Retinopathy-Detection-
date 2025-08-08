@@ -1,0 +1,75 @@
+import os
+import cv2
+import numpy as np
+from sklearn import svm
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.decomposition import PCA
+
+# Define paths and classes
+data_path = r'image resize'  # Set this to your actual image folder path
+classes = ['Mild', 'Moderate', 'NO DR', 'Proliferative', 'Severe']
+
+# Function to load images and labels without resizing
+def load_images_and_labels(data_dir, classes):
+    images = []
+    labels = []
+    for label in classes:
+        label_dir = os.path.join(data_dir, label)
+        if os.path.isdir(label_dir):
+            print(f"Processing directory: {label_dir}")  # Debugging line
+            for image_name in os.listdir(label_dir):
+                image_path = os.path.join(label_dir, image_name)
+                image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+                if image is not None:
+                    images.append(image.flatten())  # Flatten the image without resizing
+                    labels.append(label)
+                else:
+                    print(f"Failed to load image: {image_path}")  # Debugging line
+        else:
+            print(f"Directory {label_dir} does not exist or is not a directory.")  # Debugging line
+    return np.array(images), np.array(labels)
+
+# Load data
+X, y = load_images_and_labels(data_path, classes)
+
+# Debugging information
+print(f"Number of images loaded: {len(X)}")  # Check the number of images loaded
+print(f"Shape of image data: {X.shape}")  # Check the shape of the data array
+print(f"Labels: {set(y)}")  # Check the unique labels
+
+# Check if images were loaded correctly
+if X.size == 0:
+    raise ValueError("No images were loaded. Please check the data path and image format.")
+
+# Ensure that the data is in 2D format (n_samples, n_features)
+if X.ndim != 2:
+    raise ValueError(f"Expected a 2D array, but got a {X.ndim}D array instead.")
+
+# Dimensionality reduction using PCA
+pca = PCA(n_components=200)  # Reduce to 50 dimensions
+X_pca = pca.fit_transform(X)
+print(f"Shape after PCA: {X_pca.shape}")  # Check the shape after PCA
+
+# Train the SVM model with RBF kernel and perform Grid Search for hyperparameter tuning
+svm_model = svm.SVC(kernel='rbf')
+param_grid = {'C': [0.1, 1, 10], 'gamma': ['scale', 0.001, 0.01, 0.1]}
+grid_search = GridSearchCV(svm_model, param_grid, cv=5)
+grid_search.fit(X_pca, y)
+
+# Best model after tuning
+best_svm = grid_search.best_estimator_
+print("Best model parameters:", grid_search.best_params_)  # Debugging line
+
+# Test the model on the same data
+y_pred = best_svm.predict(X_pca)
+
+# Calculate and print accuracy
+accuracy = accuracy_score(y, y_pred)
+print(f'Accuracy: {accuracy:.2f}')
+
+# Print classification report
+print(classification_report(y, y_pred, target_names=classes))
+
+# Print confusion matrix
+print(confusion_matrix(y, y_pred))
